@@ -1,28 +1,27 @@
-# Reinstall Windows on your POCO X3 Pro
+# إعادة تثبيت Windows على الـ POCO X3 Pro الخاص بك
 
-## Files/Tools Needed
+## الملفات/الأدوات اللازمة
 
-- [ADB & Fastboot](https://developer.android.com/studio/releases/platform-tools)
+- [ADB و Fastboot](https://developer.android.com/studio/releases/platform-tools)
 
-Modified TWRP:
+TWRP معدله:
 
-| File Name                                       | Android version |
+| إسم الملف                                       | Android إصدار |
 |-------------------------------------------------|-----------------|
 | [twrp-3.7.1_12-vayu.img](https://github.com/woa-vayu/POCOX3Pro-Guides/raw/main/Files/twrp-3.7.1_12-vayu.img) | Android 12/12.1/13/14 |
 | [twrp-3.7.0_11-vayu.img](https://github.com/woa-vayu/POCOX3Pro-Guides/raw/main/Files/twrp-3.7.0_11-vayu.img) | Android 11 |
 
-### Boot into TWRP
->
-> If MIUI has replaced your recovery, boot to fastboot and run
+### أقلع TWRP
+> إذا قامت MIUI بإستبدال الركفري، أقلع fastboot واكتب الأمر التالي (إستبدل path/to/twrp.img بمسار الملف twrp.img على جهازك)
 
 ```cmd
 fastboot flash recovery path\to\twrp.img reboot recovery
 ```
 
-#### Formatting the Windows partition
+#### تهيئة قسم Windows (بالعربي كده فورمات لويندوز، ده مش بيعمل فورمات لأندرويد فمتقلقش)
 
 ```cmd
 adb shell format
 ```
 
-## [Next step: Reinstalling Windows](/en/3-install.md)
+## [الخطوة القادمة: تثبيت Windows](/en/3-install.md)
