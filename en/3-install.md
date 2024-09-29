@@ -1,31 +1,31 @@
-# Installing Windows on your POCO X3 Pro
+# تثبيت Windows على الـ POCO X3 Pro الخاص بك
 
-## Files/Tools Needed
+## الملفات/الأدوات اللازمة
 
-Modified TWRP:
+TWRP معدلة:
 
-| File Name                                       | Android version |
+| إسم الملف                                       | Android إصدار |
 |-------------------------------------------------|-----------------|
 | [twrp-3.7.1_12-vayu.img](https://github.com/woa-vayu/POCOX3Pro-Guides/raw/main/Files/twrp-3.7.1_12-vayu.img) | Android 12/12.1/13/14 |
 | [twrp-3.7.0_11-vayu.img](https://github.com/woa-vayu/POCOX3Pro-Guides/raw/main/Files/twrp-3.7.0_11-vayu.img) | Android 11 |
 
-- [Windows on ARM image](https://arkt-7.github.io/woawin/)
+- [ملف Windows على ARM](https://arkt-7.github.io/woawin/)
 
-- [Drivers](https://github.com/woa-vayu/POCOX3Pro-Releases/releases/latest)
+- [التعريفات/الدرايفرات](https://github.com/woa-vayu/POCOX3Pro-Releases/releases/latest)
 
-- [UEFI image](https://github.com/woa-vayu/POCOX3Pro-Releases/releases/latest)
+- [UEFI ملف](https://github.com/woa-vayu/POCOX3Pro-Releases/releases/latest)
 
-### Boot into TWRP
+### أقلع TWRP
 >
-> If your recovery has been replaced by the stock recovery, flash it again using
+> إذا قامت MIUI بإستبدال الركفري، أقلع fastboot واكتب الأمر التالي (إستبدل path/to/twrp.img بمسار الملف twrp.img على جهازك)
 
 ```cmd
 fastboot flash recovery path\to\moddedtwrp.img reboot recovery
 ```
 
-#### Execute the msc script
+#### شغّل البرنامج النصي msc
 >
-> If it asks you to run it once again, do so
+> اذا قال لك البرنامج run the script again!، اكتب الأمر مرة ثانية
 
 ```cmd
 adb shell msc
@@ -34,61 +34,80 @@ adb shell msc
 ### Diskpart
 >
 > [!WARNING]
-> DO NOT ERASE, CREATE OR OTHERWISE MODIFY ANY PARTITION WHILE IN DISKPART!!!! THIS CAN ERASE ALL OF YOUR UFS OR PREVENT YOU FROM BOOTING TO FASTBOOT!!!! THIS MEANS THAT YOUR DEVICE WILL BE PERMANENTLY BRICKED WITH NO SOLUTION! (except for taking the device to Xiaomi or flashing it with EDL, both of which will likely cost money)
+> **لا تحذف او تُنشئ او تعدل على ايٍّ من اقسام الذاكرة او البارتيشينات وانت بداخل هذه الأداة (Diskpart)!!!!!!! هذه قد تدمر كل ذاكرة التخزين التي في جهازك (UFS) او قد تمنعك من إقلاع fastboot!!!!!! هذا يعني ان جهازك سيتوقف عن العمل بدون حل! (بإستثناء اخذ الجهاز إلى Xiaomi او إصلاح الذاكرة عن طريق EDL، والذي سيكلفك بضعًا من الدراهم)**
 
 ```cmd
 diskpart
 ```
 
-#### Select the Windows volume of the phone
+#### إعرض قائمة بالأحياز (جمع حَيِّز 😅) المتصلة بحاسبك
+
+```cmd
+list volume
+```
+
+#### اختر الحَيِّزَ الخاص بـ Windows على هاتفك
 >
-> Use `list volume` to find it, replace `$` with the actual number of **WINVAYU**
+> استعمل `list volume` لِتَجِدَه، إستبدل `$` بالرقم الفعلي الخاص بـ **WINVAYU**
 
 ```diskpart
 select volume $
 ```
 
-#### Assign the letter X
+#### أعطهِ الحرف X
 
 ```diskpart
 assign letter x
 ```
 
-#### Select the ESP volume of the phone
+#### اختر الحَيِّزَ الخاص بـ ESP على هاتفك
 >
-> Use `list volume` to find it, replace `$` with the actual number of **ESPVAYU**
+> استعمل `list volume` لِتَجِدَه، إستبدل `$` بالرقم الفعلي الخاص بـ **ESPVAYU**
+
 ```diskpart
 select volume $
 ```
 
-#### Assign the letter Y
+#### أعطهِ الحرف Y
 
 ```diskpart
 assign letter y
 ```
 
-#### Exit diskpart
+#### أُخرج من Diskpart
 
 ```diskpart
 exit
 ```
 
-### Installing Windows
+### تثبيت Windows
 >
-> [!Warning]
-> DO NOT USE 24H2!!!
+> [!warning]
+> لا تستعمل 24H2!!!
 
-> Replace `path\to\install.esd` with the actual path of install.esd (it may also be named install.wim or 22631.2861.XXXXXXX.esd)
+> إستبدل `path\to\install.esd` بالمسار الفعلي لملف install.esd (من الممكن ان يكون اسم الملف install.wim)
+
 
 ```cmd
 dism /apply-image /ImageFile:path\to\install.esd /index:6 /ApplyDir:X:\
 ```
 
-> If you get `Error 87`, check the index of your image with `dism /get-imageinfo /ImageFile:path\to\install.esd`, then replace `index:6` with the actual index number of **Windows 11 Pro** in your image
+> إذا ظهر لك `Error 87`، تحقق من الترتيب الخاص بملف الـ esd الخاص بك باستخدام
+>
+>   `dism /get-imageinfo /ImageFile:path\to\install.esd`،
+> 
+>  ثم غير الرقم 6 في `index:6` بالربم الفعلي لـ **Windows 11 Pro** في ملف الـ esd الخاص بك
 
-### Copying your boot.img into Windows
 
-- Drag and drop the **rooted_boot.img** from the **platform-tools** folder into the **WINVAYU** disk in Windows Explorer, then rename it to **boot.img**.
+### استخراج الـ boot.img من الهاتف
+
+```cmd
+adb pull /dev/block/by-name/boot boot.img
+```
+
+### نسخ الـ boot.img الخاص بك إلى Windows
+
+- اسحب وافلت ملف الـ **boot.img** من مجلد الـ platform-tools إلى قرص **WINVAYU** الظاهر في متصفح الملفات.
 
 ### Installing Drivers
 
